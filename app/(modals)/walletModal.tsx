@@ -6,18 +6,15 @@ import ModalWrapper from "@/components/ModalWrapper";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
 import { ScrollView } from "react-native";
-import { Image } from "expo-image";
-import { getProfileImage } from "@/services/imageService";
 import * as Icons from "phosphor-react-native";
 import Typo from "@/components/Typo";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useAuth } from "@/contexts/authContext";
-import { UserDataType, WalletType } from "@/types";
-import { updateUser } from "@/services/userService";
 import { useRouter } from "expo-router";
-import * as ImagePicker from "expo-image-picker";
 import ImageUpload from "@/components/ImageUpload";
+import { createOrUpdateWallet } from "@/services/walletService";
+import { WalletType } from "@/types";
 
 const WalletModal = () => {
   const { user, updateUserData } = useAuth();
@@ -32,36 +29,25 @@ const WalletModal = () => {
   const onSubmit = async () => {
     let { name, image } = wallet;
     if (!name.trim() || !image) {
-      Alert.alert("User", "Please fill all the fields");
+      Alert.alert("Wallet", "Please fill all the fields");
       return;
     }
+
+    const data: WalletType = {
+      name,
+      image,
+      uid: user?.uid,
+    };
+    // TODO: include wallet id if updating
     setLoading(true);
-    const res = await updateUser(user?.uid as string, wallet);
+    const res = await createOrUpdateWallet(data);
     setLoading(false);
+    console.log("result:", res);
 
     if (res.success) {
-      // update user
-      updateUserData(user?.uid as string);
       router.back();
     } else {
-      Alert.alert("User", res.msg);
-    }
-  };
-
-  // Handle pick image from edit button
-  const onPickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: false,
-      aspect: [4, 3],
-      quality: 0.5,
-    });
-
-    // console.log(result.assets[0]); for debug picked image
-
-    if (!result.canceled) {
-      //   setUserData({ ...userData, image: result.assets[0] });
+      Alert.alert("Wallet", res.msg);
     }
   };
 
