@@ -11,7 +11,7 @@ import Typo from "@/components/Typo";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useAuth } from "@/contexts/authContext";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import ImageUpload from "@/components/ImageUpload";
 import { createOrUpdateWallet } from "@/services/walletService";
 import { WalletType } from "@/types";
@@ -26,6 +26,19 @@ const WalletModal = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const oldWallet: { name: string; image: string; id: string } =
+    useLocalSearchParams();
+  console.log("old wallet: ", oldWallet);
+
+  useEffect(() => {
+    if (oldWallet?.id) {
+      setWallet({
+        name: oldWallet?.name,
+        image: oldWallet?.image,
+      });
+    }
+  }, []);
+
   const onSubmit = async () => {
     let { name, image } = wallet;
     if (!name.trim() || !image) {
@@ -38,7 +51,7 @@ const WalletModal = () => {
       image,
       uid: user?.uid,
     };
-    // TODO: include wallet id if updating
+    if (oldWallet?.id) data.id = oldWallet?.id;
     setLoading(true);
     const res = await createOrUpdateWallet(data);
     setLoading(false);
@@ -55,7 +68,7 @@ const WalletModal = () => {
     <ModalWrapper>
       <View style={styles.container}>
         <Header
-          title="New Wallet"
+          title={oldWallet?.id ? "Update Wallet" : "New Wallet"}
           leftIcon={<BackButton />}
           style={{ marginBottom: spacingY._10 }}
         />
@@ -85,7 +98,7 @@ const WalletModal = () => {
       <View style={styles.footer}>
         <Button onPress={onSubmit} style={{ flex: 1 }} loading={loading}>
           <Typo color={colors.black} fontWeight={"700"}>
-            Add Wallet
+            {oldWallet?.id ? "Update Wallet" : "Add Wallet"}
           </Typo>
         </Button>
       </View>
