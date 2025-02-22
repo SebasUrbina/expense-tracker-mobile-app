@@ -5,8 +5,34 @@ import { colors, spacingX, spacingY } from "@/constants/theme";
 import { scale, verticalScale } from "@/utils/styling";
 import { ImageBackground } from "expo-image";
 import * as Icons from "phosphor-react-native";
+import { WalletType } from "@/types";
+import useFetchData from "@/hooks/useFetchData";
+import { orderBy, where } from "firebase/firestore";
+import { useAuth } from "@/contexts/authContext";
 
 const HomeCard = () => {
+  const { user } = useAuth();
+  const {
+    data: wallets,
+    loading,
+    error: walletLoading,
+  } = useFetchData<WalletType>("wallets", [
+    where("uid", "==", user?.uid),
+    orderBy("created", "desc"),
+  ]);
+
+  const getTotals = () => {
+    return wallets.reduce(
+      (totals: any, item: WalletType) => {
+        totals.balance = totals.balance + Number(item.amount);
+        totals.income = totals.income + Number(item.totalIncome);
+        totals.expenses = totals.expenses + Number(item.totalExpenses);
+        return totals;
+      },
+      { balance: 0, income: 0, expenses: 0 }
+    );
+  };
+
   return (
     // TODO: Make it more interactive
     <ImageBackground
@@ -27,7 +53,7 @@ const HomeCard = () => {
           />
         </View>
         <Typo color={colors.black} size={30} fontWeight={"bold"}>
-          $2323.23
+          $ {walletLoading ? "----" : getTotals()?.balance.toFixed(2)}
         </Typo>
 
         {/* total expense and income */}
@@ -49,7 +75,7 @@ const HomeCard = () => {
 
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.green} fontWeight={"600"}>
-                $ 2343
+                $ {walletLoading ? "----" : getTotals()?.income.toFixed(2)}
               </Typo>
             </View>
           </View>
@@ -70,7 +96,7 @@ const HomeCard = () => {
 
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.rose} fontWeight={"600"}>
-                $ 1232
+                $ {walletLoading ? "----" : getTotals()?.expenses.toFixed(2)}
               </Typo>
             </View>
           </View>
