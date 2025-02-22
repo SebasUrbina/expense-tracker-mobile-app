@@ -31,7 +31,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { createOrUpdateTransaction } from "@/services/transactionService";
 
-const TransactionModalr = () => {
+const TransactionModal = () => {
   const { user } = useAuth();
   const [transaction, setTransaction] = useState<TransactionType>({
     type: "expense",
@@ -107,13 +107,14 @@ const TransactionModalr = () => {
       category,
       date,
       walletId,
-      image,
+      image: image ? image : null,
       uid: user?.uid,
     };
 
-    console.log("Transaction date: ", transactionData);
+    console.log("Transaction data: ", transactionData);
 
     //TODO: include transaction id for updating
+    if (oldTransaction?.id) transactionData.id = oldTransaction.id;
     setLoading(true);
     const res = await createOrUpdateTransaction(transactionData);
     setLoading(false);
@@ -391,7 +392,7 @@ const TransactionModalr = () => {
   );
 };
 
-export default TransactionModalr;
+export default TransactionModal;
 
 const styles = StyleSheet.create({
   container: {
