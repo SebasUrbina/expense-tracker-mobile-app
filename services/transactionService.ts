@@ -106,8 +106,8 @@ const updateWalletForNewTransaction = async (
 
     const updateTotals =
       type == "income"
-        ? Number(walletData.amount) + amount
-        : Number(walletData.amount) + amount;
+        ? Number(walletData.totalIncome) + amount
+        : Number(walletData.totalExpenses) + amount;
 
     await updateDoc(walletRef, {
       amount: updatedWalletAmount,
