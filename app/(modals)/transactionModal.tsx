@@ -346,7 +346,7 @@ const TransactionModal = () => {
               onChangeText={(value) =>
                 setTransaction({
                   ...transaction,
-                  amount: Number(value.replace(/[^0-9]/g, "")),
+                  description: value,
                 })
               }
             />
