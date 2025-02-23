@@ -16,7 +16,7 @@ const index = () => {
       <Image
         style={styles.logo}
         resizeMode="contain"
-        source={require("@/assets/images/logo.png")}
+        source={require("@/assets/images/welcome.png")}
       />
     </View>
   );
