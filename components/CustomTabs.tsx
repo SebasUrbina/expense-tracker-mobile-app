@@ -114,5 +114,8 @@ const styles = StyleSheet.create({
     marginBottom: Platform.OS == "ios" ? spacingY._10 : spacingY._5,
     justifyContent: "center",
     alignItems: "center",
+    padding: verticalScale(10),
+    flex: 1,
+    height: "100%",
   },
 });
