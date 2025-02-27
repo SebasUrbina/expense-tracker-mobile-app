@@ -69,3 +69,8 @@ export const getYearsRange = (startYear: number, endYear: number): any => {
   // return result in reverse order
   return result.reverse();
 };
+
+export const parseAmount = (amount: number | undefined) => {
+  if (!amount) return "0";
+  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};

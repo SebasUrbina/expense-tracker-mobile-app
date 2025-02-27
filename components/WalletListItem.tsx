@@ -8,7 +8,7 @@ import { colors, radius, spacingX } from "@/constants/theme";
 import { Image } from "expo-image";
 import * as Icons from "phosphor-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-
+import { parseAmount } from "@/utils/common";
 const WalletListItem = ({
   item,
   index,
@@ -46,7 +46,7 @@ const WalletListItem = ({
         <View style={styles.nameContainer}>
           <Typo size={16}>{item?.name}</Typo>
           <Typo size={14} color={colors.neutral400}>
-            ${item?.amount}
+            ${parseAmount(item?.amount)}
           </Typo>
         </View>
 

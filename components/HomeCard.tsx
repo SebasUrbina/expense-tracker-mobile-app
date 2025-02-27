@@ -9,6 +9,7 @@ import { WalletType } from "@/types";
 import useFetchData from "@/hooks/useFetchData";
 import { orderBy, where } from "firebase/firestore";
 import { useAuth } from "@/contexts/authContext";
+import { parseAmount } from "@/utils/common";
 
 const HomeCard = () => {
   const { user } = useAuth();
@@ -53,7 +54,7 @@ const HomeCard = () => {
           />
         </View>
         <Typo color={colors.black} size={30} fontWeight={"bold"}>
-          $ {walletLoading ? "----" : getTotals()?.balance.toFixed(2)}
+          $ {walletLoading ? "----" : parseAmount(getTotals()?.balance)}
         </Typo>
 
         {/* total expense and income */}
@@ -75,7 +76,7 @@ const HomeCard = () => {
 
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.green} fontWeight={"600"}>
-                $ {walletLoading ? "----" : getTotals()?.income.toFixed(2)}
+                $ {walletLoading ? "----" : parseAmount(getTotals()?.income)}
               </Typo>
             </View>
           </View>
@@ -96,7 +97,7 @@ const HomeCard = () => {
 
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.rose} fontWeight={"600"}>
-                $ {walletLoading ? "----" : getTotals()?.expenses.toFixed(2)}
+                $ {walletLoading ? "----" : parseAmount(getTotals()?.expenses)}
               </Typo>
             </View>
           </View>

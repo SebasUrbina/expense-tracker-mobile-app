@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/authContext";
 import { orderBy, where } from "firebase/firestore";
 import Loading from "@/components/Loading";
 import WalletListItem from "@/components/WalletListItem";
-
+import { parseAmount } from "@/utils/common";
 const Wallet = () => {
   const router = useRouter();
   const { user } = useAuth();
@@ -38,7 +38,7 @@ const Wallet = () => {
         <View style={styles.balanceView}>
           <View style={{ alignItems: "center" }}>
             <Typo size={45} fontWeight={"500"}>
-              ${getTotalBalance()?.toFixed(2)}
+              ${parseAmount(getTotalBalance())}
             </Typo>
             <Typo size={16} color={colors.neutral300}>
               Total Balance

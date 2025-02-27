@@ -14,6 +14,7 @@ import { expenseCategories, incomeCategory } from "@/constants/data";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Timestamp } from "firebase/firestore";
 import { useRouter } from "expo-router";
+import { parseAmount } from "@/utils/common";
 
 const TransactionList = ({
   data,
@@ -131,7 +132,7 @@ const TransactionItem = ({
             color={item?.type == "income" ? colors.primary : colors.rose}
           >
             {/* - $23 */}
-            {`${item?.type == "income" ? "+ $" : "- $"}${item?.amount}`}
+            {`${item?.type == "income" ? "+ $" : "- $"}${parseAmount(item?.amount)}`}
           </Typo>
           <Typo size={13} color={colors.neutral400}>
             {/* 12 jan */}
