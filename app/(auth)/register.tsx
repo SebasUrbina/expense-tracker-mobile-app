@@ -9,7 +9,7 @@ import { verticalScale } from "@/utils/styling";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
-import { UseAuth } from "@/contexts/authContext";
+import { useAuth } from "@/contexts/authContext";
 
 const Register = () => {
   const emailRef = useRef("");
@@ -17,7 +17,7 @@ const Register = () => {
   const nameRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { register: registerUser } = UseAuth();
+  const { register: registerUser } = useAuth();
   const handleSubmit = async () => {
     if (!emailRef.current || !passwordRef.current || !nameRef.current) {
       Alert.alert("Sign Up", "Please fill all the fields");
