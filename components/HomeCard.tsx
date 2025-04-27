@@ -1,41 +1,111 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
 import Typo from "./Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { scale, verticalScale } from "@/utils/styling";
 import { ImageBackground } from "expo-image";
 import * as Icons from "phosphor-react-native";
-import { WalletType } from "@/types";
+import { TransactionType } from "@/types";
 import useFetchData from "@/hooks/useFetchData";
 import { orderBy, where } from "firebase/firestore";
 import { useAuth } from "@/contexts/authContext";
 import { parseAmount } from "@/utils/common";
 
+// Tipo para los filtros de tiempo
+type TimeFilterType = "month" | "year" | "all";
+
 const HomeCard = () => {
+  const [timeFilter, setTimeFilter] = useState<TimeFilterType>("month");
   const { user } = useAuth();
+
   const {
-    data: wallets,
-    loading,
-    error: walletLoading,
-  } = useFetchData<WalletType>("wallets", [
+    data: transactions,
+    loading: transactionsLoading,
+    error: transactionsError,
+  } = useFetchData<TransactionType>("transactions", [
     where("uid", "==", user?.uid),
-    orderBy("created", "desc"),
+    orderBy("date", "desc"),
   ]);
 
+  const getFilteredTransactions = () => {
+    if (timeFilter === "all" || !transactions.length) {
+      return transactions;
+    }
+
+    const now = new Date();
+    const filtered = transactions.filter((transaction: TransactionType) => {
+      // Manejo seguro de la fecha de transacción
+      let transactionDate: Date;
+      if (transaction.date) {
+        // Si transaction.date es un objeto de Firestore con método toDate()
+        if (
+          typeof transaction.date === "object" &&
+          "toDate" in transaction.date &&
+          typeof transaction.date.toDate === "function"
+        ) {
+          transactionDate = (transaction.date.toDate as Function)();
+        } else {
+          // Si es un string o timestamp de JS
+          transactionDate = new Date(transaction.date as any);
+        }
+      } else {
+        // Si no hay fecha, usar fecha actual (esto no debería ocurrir)
+        return false;
+      }
+
+      if (timeFilter === "month") {
+        return (
+          transactionDate.getMonth() === now.getMonth() &&
+          transactionDate.getFullYear() === now.getFullYear()
+        );
+      } else if (timeFilter === "year") {
+        return transactionDate.getFullYear() === now.getFullYear();
+      }
+
+      return true;
+    });
+
+    return filtered;
+  };
+
   const getTotals = () => {
-    return wallets.reduce(
-      (totals: any, item: WalletType) => {
-        totals.balance = totals.balance + Number(item.amount);
-        totals.income = totals.income + Number(item.totalIncome);
-        totals.expenses = totals.expenses + Number(item.totalExpenses);
+    const filteredTransactions = getFilteredTransactions();
+
+    return filteredTransactions.reduce(
+      (totals: any, item: TransactionType) => {
+        if (item.type === "income") {
+          totals.income += Number(item.amount);
+          totals.balance += Number(item.amount);
+        } else if (item.type === "expense") {
+          totals.expenses += Number(item.amount);
+          totals.balance -= Number(item.amount);
+        }
         return totals;
       },
       { balance: 0, income: 0, expenses: 0 }
     );
   };
 
+  const getFilterLabel = (): string => {
+    switch (timeFilter) {
+      case "month":
+        return "Month";
+      case "year":
+        return "Year";
+      case "all":
+        return "All";
+      default:
+        return "Month";
+    }
+  };
+
+  const handleFilterChange = (filter: TimeFilterType) => {
+    setTimeFilter(filter);
+  };
+
+  const isLoading = transactionsLoading;
+
   return (
-    // TODO: Make it more interactive
     <ImageBackground
       source={require("../assets/images/card.png")}
       resizeMode="stretch"
@@ -47,14 +117,30 @@ const HomeCard = () => {
           <Typo color={colors.neutral800} size={17} fontWeight={"500"}>
             Total Balance
           </Typo>
-          <Icons.DotsThreeOutline
-            size={verticalScale(23)}
-            color={colors.black}
-            weight="fill"
-          />
+          <View style={styles.filterContainer}>
+            <Typo color={colors.neutral700} size={14} fontWeight={"500"}>
+              {getFilterLabel()}
+            </Typo>
+            <TouchableOpacity
+              onPress={() => {
+                const nextFilter: Record<TimeFilterType, TimeFilterType> = {
+                  month: "year",
+                  year: "all",
+                  all: "month",
+                };
+                handleFilterChange(nextFilter[timeFilter]);
+              }}
+            >
+              <Icons.CalendarMinus
+                size={verticalScale(16)}
+                color={colors.black}
+                weight="bold"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <Typo color={colors.black} size={30} fontWeight={"bold"}>
-          $ {walletLoading ? "----" : parseAmount(getTotals()?.balance)}
+          $ {isLoading ? "----" : parseAmount(getTotals()?.balance)}
         </Typo>
 
         {/* total expense and income */}
@@ -76,7 +162,7 @@ const HomeCard = () => {
 
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.green} fontWeight={"600"}>
-                $ {walletLoading ? "----" : parseAmount(getTotals()?.income)}
+                $ {isLoading ? "----" : parseAmount(getTotals()?.income)}
               </Typo>
             </View>
           </View>
@@ -97,7 +183,7 @@ const HomeCard = () => {
 
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.rose} fontWeight={"600"}>
-                $ {walletLoading ? "----" : parseAmount(getTotals()?.expenses)}
+                $ {isLoading ? "----" : parseAmount(getTotals()?.expenses)}
               </Typo>
             </View>
           </View>
@@ -145,5 +231,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacingX._7,
+  },
+  filterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.neutral350,
+    borderRadius: 20,
+    paddingHorizontal: spacingX._10,
+    paddingVertical: spacingY._5,
+    gap: spacingX._5,
   },
 });
