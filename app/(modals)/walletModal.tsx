@@ -1,6 +1,6 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { colors, spacingX, spacingY } from "@/constants/theme";
+import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { scale, verticalScale } from "@/utils/styling";
 import ModalWrapper from "@/components/ModalWrapper";
 import Header from "@/components/Header";
@@ -12,21 +12,21 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useAuth } from "@/contexts/authContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import ImageUpload from "@/components/ImageUpload";
 import { createOrUpdateWallet, deleteWallet } from "@/services/walletService";
 import { WalletType } from "@/types";
+import { availableIcons, WalletIconName, walletIcons } from "@/constants/data";
 
 const WalletModal = () => {
   const { user, updateUserData } = useAuth();
   const [wallet, setWallet] = useState<WalletType>({
     name: "",
-    image: null,
+    icon: "Wallet",
   });
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const oldWallet: { name: string; image: string; id: string } =
+  const oldWallet: { name: string; icon: string; id: string } =
     useLocalSearchParams();
   console.log("old wallet: ", oldWallet);
 
@@ -34,21 +34,21 @@ const WalletModal = () => {
     if (oldWallet?.id) {
       setWallet({
         name: oldWallet?.name,
-        image: oldWallet?.image,
+        icon: oldWallet?.icon,
       });
     }
   }, []);
 
   const onSubmit = async () => {
-    let { name, image } = wallet;
-    if (!name.trim() || !image) {
+    let { name, icon } = wallet;
+    if (!name.trim() || !icon) {
       Alert.alert("Wallet", "Please fill all the fields");
       return;
     }
 
     const data: WalletType = {
       name,
-      image,
+      icon,
       uid: user?.uid,
     };
     if (oldWallet?.id) data.id = oldWallet?.id;
@@ -94,6 +94,17 @@ const WalletModal = () => {
       ]
     );
   };
+
+  const renderIcon = (iconName: WalletIconName) => {
+    const IconComponent = walletIcons[iconName];
+    return IconComponent ? (
+      <IconComponent
+        size={verticalScale(24)}
+        color={wallet.icon === iconName ? colors.primary : colors.neutral400}
+        weight={wallet.icon === iconName ? "fill" : "regular"}
+      />
+    ) : null;
+  };
   return (
     <ModalWrapper>
       <View style={styles.container}>
@@ -115,13 +126,25 @@ const WalletModal = () => {
           </View>
           <View style={styles.inputContainer}>
             <Typo color={colors.neutral200}>Wallet Icon</Typo>
-            {/* image input */}
-            <ImageUpload
-              file={wallet.image}
-              onClear={() => setWallet({ ...wallet, image: null })}
-              onSelect={(file) => setWallet({ ...wallet, image: file })}
-              placeholder="Upload Image"
-            />
+            {/* icon grid */}
+            <View style={styles.iconGrid}>
+              {availableIcons.map((iconName) => (
+                <TouchableOpacity
+                  key={iconName}
+                  style={[
+                    styles.iconButton,
+                    wallet.icon === iconName && {
+                      backgroundColor: colors.primary + "20",
+                      borderWidth: 1,
+                      borderColor: colors.primary,
+                    },
+                  ]}
+                  onPress={() => setWallet({ ...wallet, icon: iconName })}
+                >
+                  {renderIcon(iconName)}
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -202,5 +225,22 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     gap: spacingY._10,
+  },
+  iconGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: scale(12),
+    padding: spacingX._10,
+    backgroundColor: colors.neutral800,
+    borderRadius: radius._10,
+    paddingHorizontal: spacingX._5,
+  },
+  iconButton: {
+    width: verticalScale(40),
+    height: verticalScale(40),
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: radius._10,
+    backgroundColor: colors.neutral700,
   },
 });

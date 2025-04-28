@@ -1,14 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Typo from "./Typo";
 import { WalletType } from "@/types";
 import { Router } from "expo-router";
 import { verticalScale } from "@/utils/styling";
 import { colors, radius, spacingX } from "@/constants/theme";
-import { Image } from "expo-image";
 import * as Icons from "phosphor-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { parseAmount } from "@/utils/common";
+import { walletIcons } from "@/constants/data";
+
 const WalletListItem = ({
   item,
   index,
@@ -24,10 +25,11 @@ const WalletListItem = ({
       params: {
         id: item?.id,
         name: item?.name,
-        image: item?.image,
+        icon: item?.icon,
       },
     });
   };
+  const IconComponent = walletIcons[item.icon as keyof typeof walletIcons];
   return (
     <Animated.View
       entering={FadeInDown.delay(index * 50)
@@ -35,13 +37,15 @@ const WalletListItem = ({
         .damping(13)}
     >
       <TouchableOpacity style={styles.container} onPress={openWallet}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={{ flex: 1 }}
-            source={item?.image}
-            contentFit="cover"
-            transition={100}
-          />
+        <View style={styles.iconContainer}>
+          {IconComponent && (
+            <IconComponent
+              size={verticalScale(28)} // Aumentar el tamaño del ícono para mejor visibilidad
+              color={colors.primary}
+              weight="fill"
+              style={styles.icon} // Aplicar estilo adicional
+            />
+          )}
         </View>
         <View style={styles.nameContainer}>
           <Typo size={16}>{item?.name}</Typo>
@@ -68,14 +72,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: verticalScale(17),
   },
-  imageContainer: {
+  iconContainer: {
     height: verticalScale(45),
     width: verticalScale(45),
     borderWidth: 1,
     borderColor: colors.neutral600,
     borderRadius: radius._12,
-    borderCurve: "continuous",
     overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: {
+    alignSelf: "center",
   },
   nameContainer: {
     flex: 1,

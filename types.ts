@@ -1,6 +1,7 @@
 import { Icon } from "phosphor-react-native";
 import { ViewStyle } from "react-native";
 import { Timestamp } from "firebase/firestore";
+import { WalletIconName } from "./constants/data";
 
 export type UserDataType = {
   name: string;
@@ -19,7 +20,7 @@ export type WalletType = {
   amount?: number;
   totalIncome?: number;
   totalExpenses?: number;
-  image: any;
+  icon: WalletIconName;
   uid?: string;
   created?: Date;
 };
@@ -43,6 +44,7 @@ export type TransactionType = {
   image?: any;
   uid?: string;
   walletId: string;
+  frequency?: string;
 };
 
 export type TransactionListType = {
@@ -67,4 +69,16 @@ export type CategoryType = {
 
 export type ExpenseCategoriesType = {
   [key: string]: CategoryType;
+};
+
+export type paramType = {
+  id: string;
+  type: string;
+  amount: string;
+  category: string;
+  date: string;
+  description: string;
+  image: string;
+  uid: string;
+  walletId: string;
 };
