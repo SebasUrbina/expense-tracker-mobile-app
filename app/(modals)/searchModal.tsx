@@ -11,10 +11,12 @@ import { TransactionType } from "@/types";
 import { orderBy, where } from "firebase/firestore";
 import useFetchData from "@/hooks/useFetchData";
 import TransactionList from "@/components/TransactionList";
+import { useTranslation } from "react-i18next";
 
 const SearchModal = () => {
   const { user } = useAuth();
   const [search, setSearch] = useState("");
+  const { t } = useTranslation();
 
   const contraints = [where("uid", "==", user?.uid), orderBy("date", "desc")];
 
@@ -46,7 +48,7 @@ const SearchModal = () => {
     <ModalWrapper style={{ backgroundColor: colors.neutral900 }}>
       <View style={styles.container}>
         <Header
-          title={"Search"}
+          title={t("common.search")}
           leftIcon={<BackButton />}
           style={{ marginBottom: spacingY._10 }}
         />
@@ -67,7 +69,7 @@ const SearchModal = () => {
             <TransactionList
               loading={transactionLoading}
               data={filteredTransactions}
-              emptyListMessage="No transactions match your search keywords"
+              emptyListMessage={t("common.noResults")}
             />
           </View>
         </ScrollView>

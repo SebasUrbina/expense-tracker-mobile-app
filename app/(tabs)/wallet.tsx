@@ -13,10 +13,11 @@ import { orderBy, where } from "firebase/firestore";
 import Loading from "@/components/Loading";
 import WalletListItem from "@/components/WalletListItem";
 import { parseAmount } from "@/utils/common";
+import { useTranslation } from "react-i18next";
 const Wallet = () => {
   const router = useRouter();
   const { user } = useAuth();
-
+  const { t } = useTranslation();
   const {
     data: wallets,
     loading,
@@ -41,7 +42,7 @@ const Wallet = () => {
               ${parseAmount(getTotalBalance())}
             </Typo>
             <Typo size={16} color={colors.neutral300}>
-              Total Balance
+              {t("home.homeCard.title")}
             </Typo>
           </View>
         </View>
@@ -51,7 +52,7 @@ const Wallet = () => {
           {/* header */}
           <View style={styles.flexRow}>
             <Typo size={20} fontWeight={"500"}>
-              My wallets
+              {t("wallet.title")}
             </Typo>
             <TouchableOpacity
               onPress={() => router.push("/(modals)/walletModal")}

@@ -14,6 +14,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 type accountOptionType = {
   title: string;
@@ -25,30 +26,29 @@ type accountOptionType = {
 const Profile = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const accountOptions: accountOptionType[] = [
     {
-      title: "Edit Profile",
+      title: t("settings.profile"),
       icon: <Icons.User size={26} color={colors.white} weight="fill" />,
       routeName: "/(modals)/profileModal",
       bgColor: "#6366f1",
     },
     {
-      title: "Settings",
+      title: t("common.settings"),
       icon: <Icons.GearSix size={26} color={colors.white} weight="fill" />,
-      // routeName: "/(modals)/profileModal",
+      routeName: "/(modals)/settingsModal",
       bgColor: "#059669",
     },
     {
-      title: "Privacy Policy",
+      title: t("common.privacyPolicy"),
       icon: <Icons.Lock size={26} color={colors.white} weight="fill" />,
-      // routeName: "/(modals)/profileModal",
       bgColor: colors.neutral600,
     },
     {
-      title: "Logout",
+      title: t("common.logout"),
       icon: <Icons.Power size={26} color={colors.white} weight="fill" />,
-      // routeName: "/(modals)/profileModal",
       bgColor: "#e11d48",
     },
   ];
@@ -58,14 +58,14 @@ const Profile = () => {
   };
 
   const showLogoutAlert = () => {
-    Alert.alert("Confirm", "Are you sure you want to logout?", [
+    Alert.alert(t("common.confirm"), t("alerts.confirmLogout"), [
       {
-        text: "Cancel",
+        text: t("common.cancel"),
         onPress: () => console.log("cancel logout"),
         style: "cancel",
       },
       {
-        text: "Logout",
+        text: t("common.logout"),
         onPress: () => handleLogout(),
         style: "destructive",
       },
@@ -77,14 +77,17 @@ const Profile = () => {
       showLogoutAlert();
     }
 
-    if(item.routeName) router.push(item.routeName);
+    if (item.routeName) router.push(item.routeName);
   };
 
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         {/* header */}
-        <Header title="Profile" style={{ marginVertical: spacingY._10 }} />
+        <Header
+          title={t("settings.profile")}
+          style={{ marginVertical: spacingY._10 }}
+        />
 
         {/* user info */}
         <View style={styles.userInfo}>

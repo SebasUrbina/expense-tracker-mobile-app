@@ -10,6 +10,7 @@ import useFetchData from "@/hooks/useFetchData";
 import { orderBy, where } from "firebase/firestore";
 import { useAuth } from "@/contexts/authContext";
 import { parseAmount } from "@/utils/common";
+import { useTranslation } from "react-i18next";
 
 // Tipo para los filtros de tiempo
 type TimeFilterType = "month" | "year" | "all";
@@ -17,7 +18,7 @@ type TimeFilterType = "month" | "year" | "all";
 const HomeCard = () => {
   const [timeFilter, setTimeFilter] = useState<TimeFilterType>("month");
   const { user } = useAuth();
-
+  const { t } = useTranslation();
   const {
     data: transactions,
     loading: transactionsLoading,
@@ -89,13 +90,13 @@ const HomeCard = () => {
   const getFilterLabel = (): string => {
     switch (timeFilter) {
       case "month":
-        return "Month";
+        return t("home.homeCard.month");
       case "year":
-        return "Year";
+        return t("home.homeCard.year");
       case "all":
-        return "All";
+        return t("home.homeCard.all");
       default:
-        return "Month";
+        return t("home.homeCard.month");
     }
   };
 
@@ -104,7 +105,6 @@ const HomeCard = () => {
   };
 
   const isLoading = transactionsLoading;
-
   return (
     <ImageBackground
       source={require("../assets/images/card.png")}
@@ -115,7 +115,7 @@ const HomeCard = () => {
         {/* total balance */}
         <View style={styles.totalBalanceRow}>
           <Typo color={colors.neutral800} size={17} fontWeight={"500"}>
-            Total Balance
+            {t("home.homeCard.title")}
           </Typo>
           <View style={styles.filterContainer}>
             <Typo color={colors.neutral700} size={14} fontWeight={"500"}>
@@ -156,7 +156,7 @@ const HomeCard = () => {
                 />
               </View>
               <Typo color={colors.neutral700} size={16} fontWeight={"500"}>
-                Income
+                {t("home.income")}
               </Typo>
             </View>
 
@@ -177,7 +177,7 @@ const HomeCard = () => {
                 />
               </View>
               <Typo color={colors.neutral700} size={16} fontWeight={"500"}>
-                Expense
+                {t("home.expenses")}
               </Typo>
             </View>
 

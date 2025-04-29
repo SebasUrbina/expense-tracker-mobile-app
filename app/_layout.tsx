@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import { AuthProvider } from "@/contexts/authContext";
-
+import i18n from "@/constants/i18n";
+import { I18nextProvider } from "react-i18next";
 const StackLayout = () => {
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -38,7 +39,9 @@ const StackLayout = () => {
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <StackLayout />
+      <I18nextProvider i18n={i18n}>
+        <StackLayout />
+      </I18nextProvider>
     </AuthProvider>
   );
 }

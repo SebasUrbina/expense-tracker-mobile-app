@@ -15,6 +15,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { createOrUpdateWallet, deleteWallet } from "@/services/walletService";
 import { WalletType } from "@/types";
 import { availableIcons, WalletIconName, walletIcons } from "@/constants/data";
+import { useTranslation } from "react-i18next";
 
 const WalletModal = () => {
   const { user, updateUserData } = useAuth();
@@ -30,6 +31,8 @@ const WalletModal = () => {
     useLocalSearchParams();
   console.log("old wallet: ", oldWallet);
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (oldWallet?.id) {
       setWallet({
@@ -42,7 +45,7 @@ const WalletModal = () => {
   const onSubmit = async () => {
     let { name, icon } = wallet;
     if (!name.trim() || !icon) {
-      Alert.alert("Wallet", "Please fill all the fields");
+      Alert.alert("Wallet", t("alerts.fillFields"));
       return;
     }
 
@@ -77,22 +80,18 @@ const WalletModal = () => {
     }
   };
   const showDeleteAlert = () => {
-    Alert.alert(
-      "Confirm",
-      "Are you sure you want to do this?\nThis action will remove all the transactions related to this wallet",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("cancel delete"),
-          style: "cancel",
-        },
-        {
-          text: "Delete",
-          onPress: () => onDelete(),
-          style: "destructive",
-        },
-      ]
-    );
+    Alert.alert(t("common.confirm"), t("wallet.deleteConfirm"), [
+      {
+        text: t("common.cancel"),
+        onPress: () => console.log("cancel delete"),
+        style: "cancel",
+      },
+      {
+        text: t("common.delete"),
+        onPress: () => onDelete(),
+        style: "destructive",
+      },
+    ]);
   };
 
   const renderIcon = (iconName: WalletIconName) => {
@@ -109,7 +108,7 @@ const WalletModal = () => {
     <ModalWrapper>
       <View style={styles.container}>
         <Header
-          title={oldWallet?.id ? "Update Wallet" : "New Wallet"}
+          title={oldWallet?.id ? t("wallet.update") : t("wallet.new")}
           leftIcon={<BackButton />}
           style={{ marginBottom: spacingY._10 }}
         />
@@ -117,7 +116,7 @@ const WalletModal = () => {
         {/* form */}
         <ScrollView contentContainerStyle={styles.form}>
           <View style={styles.inputContainer}>
-            <Typo color={colors.neutral200}>Wallet name</Typo>
+            <Typo color={colors.neutral200}>{t("common.walletName")}</Typo>
             <Input
               placeholder="Salary"
               value={wallet.name}
@@ -125,7 +124,7 @@ const WalletModal = () => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Typo color={colors.neutral200}>Wallet Icon</Typo>
+            <Typo color={colors.neutral200}>{t("common.walletIcon")}</Typo>
             {/* icon grid */}
             <View style={styles.iconGrid}>
               {availableIcons.map((iconName) => (
@@ -166,7 +165,7 @@ const WalletModal = () => {
         )}
         <Button onPress={onSubmit} style={{ flex: 1 }} loading={loading}>
           <Typo color={colors.black} fontWeight={"700"}>
-            {oldWallet?.id ? "Update Wallet" : "Add Wallet"}
+            {oldWallet?.id ? t("common.update") : t("common.add")}
           </Typo>
         </Button>
       </View>

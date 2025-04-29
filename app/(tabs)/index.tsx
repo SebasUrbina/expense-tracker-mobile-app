@@ -21,11 +21,12 @@ import { useRouter } from "expo-router";
 import { limit, orderBy, where } from "firebase/firestore";
 import useFetchData from "@/hooks/useFetchData";
 import { TransactionType } from "@/types";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const { user } = useAuth();
   const router = useRouter();
-
+  const { t } = useTranslation();
   const contraints = [
     where("uid", "==", user?.uid),
     orderBy("date", "desc"),
@@ -50,13 +51,16 @@ const Home = () => {
         <View style={styles.header}>
           <View style={{ gap: 4 }}>
             <Typo size={16} color={colors.neutral400}>
-              Hello,
+              {t("home.hello") + ","}
             </Typo>
             <Typo size={20} fontWeight={"500"}>
               {user?.name}
             </Typo>
           </View>
-          <TouchableOpacity onPress={()=> router.push("/(modals)/searchModal")} style={styles.searchIcon}>
+          <TouchableOpacity
+            onPress={() => router.push("/(modals)/searchModal")}
+            style={styles.searchIcon}
+          >
             <Icons.MagnifyingGlass
               size={verticalScale(22)}
               color={colors.neutral200}
@@ -78,7 +82,7 @@ const Home = () => {
           <TransactionList
             data={recentTransactions}
             loading={transactionLoading}
-            title="Recent Transactions"
+            title={t("common.recentTransactions")}
           />
         </ScrollView>
 

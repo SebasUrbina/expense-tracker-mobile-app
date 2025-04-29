@@ -15,6 +15,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { Timestamp } from "firebase/firestore";
 import { useRouter } from "expo-router";
 import { parseAmount } from "@/utils/common";
+import { useTranslation } from "react-i18next";
 
 const TransactionList = ({
   data,
@@ -22,6 +23,7 @@ const TransactionList = ({
   loading,
   emptyListMessage,
 }: TransactionListType) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const handleClick = (item: TransactionType) => {
     // transaction details modal
@@ -68,7 +70,7 @@ const TransactionList = ({
           color={colors.neutral400}
           style={{ textAlign: "center", marginTop: spacingY._15 }}
         >
-          Not transactions added yet!
+          {t("transactions.notAdded")}
         </Typo>
       )}
 
@@ -132,7 +134,9 @@ const TransactionItem = ({
             color={item?.type == "income" ? colors.primary : colors.rose}
           >
             {/* - $23 */}
-            {`${item?.type == "income" ? "+ $" : "- $"}${parseAmount(item?.amount)}`}
+            {`${item?.type == "income" ? "+ $" : "- $"}${parseAmount(
+              item?.amount
+            )}`}
           </Typo>
           <Typo size={13} color={colors.neutral400}>
             {/* 12 jan */}

@@ -17,6 +17,7 @@ import { UserDataType } from "@/types";
 import { updateUser } from "@/services/userService";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import { useTranslation } from "react-i18next";
 
 const ProfileModal = () => {
   const { user, updateUserData } = useAuth();
@@ -27,11 +28,12 @@ const ProfileModal = () => {
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const onSubmit = async () => {
     let { name, image } = userData;
     if (!name.trim()) {
-      Alert.alert("User", "Please fill all the fields");
+      Alert.alert("User", t("alerts.fillFields"));
       return;
     }
     setLoading(true);
@@ -75,7 +77,7 @@ const ProfileModal = () => {
     <ModalWrapper>
       <View style={styles.container}>
         <Header
-          title="Update Profile"
+          title={t("settings.profile")}
           leftIcon={<BackButton />}
           style={{ marginBottom: spacingY._10 }}
         />
@@ -98,9 +100,9 @@ const ProfileModal = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
-            <Typo color={colors.neutral200}>Name</Typo>
+            <Typo color={colors.neutral200}>{t("common.name")}</Typo>
             <Input
-              placeholder="Name"
+              placeholder={t("common.name")}
               value={userData.name}
               onChangeText={(value) =>
                 setUserData({ ...userData, name: value })
@@ -114,7 +116,7 @@ const ProfileModal = () => {
       <View style={styles.footer}>
         <Button onPress={onSubmit} style={{ flex: 1 }} loading={loading}>
           <Typo color={colors.black} fontWeight={"700"}>
-            Update
+            {t("common.update")}
           </Typo>
         </Button>
       </View>

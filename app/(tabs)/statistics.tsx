@@ -15,8 +15,10 @@ import {
   fetchYearlyStats,
 } from "@/services/transactionService";
 import TransactionList from "@/components/TransactionList";
+import { useTranslation } from "react-i18next";
 
 const Statistics = () => {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const { user } = useAuth();
   const [chartData, setChartData] = useState([]);
@@ -76,7 +78,7 @@ const Statistics = () => {
     <ScreenWrapper>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Header title="Statistics" />
+          <Header title={t("statistics.title")} />
         </View>
 
         <ScrollView
@@ -88,7 +90,11 @@ const Statistics = () => {
           showsVerticalScrollIndicator={false}
         >
           <SegmentedControl
-            values={["Weekly", "Montly", "Yearly"]}
+            values={[
+              t("statistics.weekly"),
+              t("statistics.monthly"),
+              t("statistics.yearly"),
+            ]}
             selectedIndex={activeIndex}
             onChange={(event) => {
               setActiveIndex(event.nativeEvent.selectedSegmentIndex);
@@ -142,8 +148,8 @@ const Statistics = () => {
           {/* transactions list */}
           <View>
             <TransactionList
-              title="Transactions"
-              emptyListMessage="No transactions found"
+              title={t("common.recentTransactions")}
+              emptyListMessage={t("transactions.notFound")}
               data={transactions}
             />
           </View>

@@ -37,6 +37,7 @@ import {
   deleteTransaction,
 } from "@/services/transactionService";
 import Button from "@/components/Button";
+import { useTranslation } from "react-i18next";
 
 const TransactionModal = () => {
   const { user } = useAuth();
@@ -44,6 +45,7 @@ const TransactionModal = () => {
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState<WalletType | null>(null);
+  const { t } = useTranslation();
 
   //TODO: Implemente image service and recurrent transaction
   const [transaction, setTransaction] = useState<TransactionType>({
@@ -131,7 +133,7 @@ const TransactionModal = () => {
 
   const onSubmit = async () => {
     if (!areFieldsFilled()) {
-      Alert.alert("Transaction", "Please fill all the fields");
+      Alert.alert("Transaction", t("alerts.fillFields"));
       return;
     }
 
@@ -177,22 +179,18 @@ const TransactionModal = () => {
     }
   };
   const showDeleteAlert = () => {
-    Alert.alert(
-      "Confirm",
-      "Are you sure you want to delete this transaction?",
-      [
-        {
-          text: "cancel",
-          style: "cancel",
-          onPress: () => console.log("cancel delete"),
-        },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: () => onDelete(),
-        },
-      ]
-    );
+    Alert.alert(t("common.confirm"), t("transactions.deleteConfirm"), [
+      {
+        text: t("common.cancel"),
+        style: "cancel",
+        onPress: () => console.log("cancel delete"),
+      },
+      {
+        text: t("common.delete"),
+        style: "destructive",
+        onPress: () => onDelete(),
+      },
+    ]);
   };
   //TODO: Implemente recurrent options
   const recurrentOptions = [
@@ -215,7 +213,9 @@ const TransactionModal = () => {
             {/* Main Container */}
             <Header
               title={
-                oldTransaction?.id ? "Update Transaction" : "New Transaction"
+                oldTransaction?.id
+                  ? t("transactions.update")
+                  : t("transactions.add")
               }
               leftIcon={<BackButton />}
               style={{ marginBottom: spacingY._10 }}
@@ -229,7 +229,7 @@ const TransactionModal = () => {
                     <Typo size={14} color={colors.white}>
                       {(transaction.date as Date).toLocaleDateString() ===
                       new Date().toLocaleDateString()
-                        ? "Today"
+                        ? t("common.today")
                         : (transaction.date as Date).toLocaleDateString()}
                     </Typo>
                     <Icons.CaretDown
@@ -243,7 +243,7 @@ const TransactionModal = () => {
                 <MenuTrigger>
                   <View style={styles.menuButton}>
                     <Typo size={14} color={colors.white}>
-                      {selectedWallet?.name || "Select Wallet"}
+                      {selectedWallet?.name || t("common.selectWallet")}
                     </Typo>
                     <Icons.CaretDown
                       size={verticalScale(16)}
@@ -269,7 +269,7 @@ const TransactionModal = () => {
               <TextInput
                 ref={descriptionInputRef}
                 style={styles.descriptionInput}
-                placeholder="Description (optional)"
+                placeholder={t("common.description")}
                 placeholderTextColor={colors.neutral500}
                 value={transaction.description}
                 onChangeText={(value) =>
