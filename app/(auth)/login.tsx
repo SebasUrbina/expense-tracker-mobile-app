@@ -10,30 +10,30 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/authContext";
+import { useTranslation } from "react-i18next";
 const Login = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { login: loginUser } = useAuth();
+  const { t } = useTranslation();
 
   const handleSubmit = async () => {
     if (!emailRef.current || !passwordRef.current) {
-      Alert.alert("Login", "Please fill all the fields");
+      Alert.alert(t("auth.login"), t("alerts.fillFields"));
       return;
     }
     setIsLoading(true);
 
     const res = await loginUser(emailRef.current, passwordRef.current);
     setIsLoading(false);
-    if(!res.success){
-      Alert.alert("Login", res.msg);
+    if (!res.success) {
+      Alert.alert(t("auth.login"), res.msg);
     }
-
 
     console.log("email", emailRef.current);
     console.log("password", passwordRef.current);
-    console.log("good to go");
   };
 
   return (
@@ -44,21 +44,21 @@ const Login = () => {
 
         <View style={{ gap: 5, marginTop: spacingY._20 }}>
           <Typo size={30} fontWeight={"800"}>
-            Hey,
+            {t("auth.hey") + ","}
           </Typo>
           <Typo size={30} fontWeight={"800"}>
-            Welcome back
+            {t("auth.welcomeBack")}
           </Typo>
 
           {/* form */}
           <View style={styles.form}>
             <Typo size={16} color={colors.textLighter}>
-              Login now to track all your expenses
+              {t("auth.msg")}
             </Typo>
 
             {/* input */}
             <Input
-              placeholder="Enter your email"
+              placeholder={t("auth.emailPlaceholder")}
               onChangeText={(value) => (emailRef.current = value)}
               icon={
                 <Icons.At
@@ -69,7 +69,7 @@ const Login = () => {
               }
             />
             <Input
-              placeholder="Enter your password"
+              placeholder={t("auth.passwordPlaceholder")}
               secureTextEntry
               onChangeText={(value) => (passwordRef.current = value)}
               icon={
@@ -84,21 +84,21 @@ const Login = () => {
         </View>
 
         <Typo size={14} color={colors.text} style={{ alignSelf: "flex-end" }}>
-          Forgot password?
+          {t("auth.forgotPassword")}
         </Typo>
 
         <Button onPress={handleSubmit} loading={isLoading}>
           <Typo fontWeight={"700"} color={colors.black} size={21}>
-            Login
+            {t("auth.login")}
           </Typo>
         </Button>
 
         {/* footer */}
         <View style={styles.footer}>
-          <Typo size={15}>Don't have account?</Typo>
+          <Typo size={15}>{t("auth.dontHaveAccount")}</Typo>
           <Pressable onPress={() => router.navigate("/(auth)/register")}>
             <Typo size={15} fontWeight={"700"} color={colors.primary}>
-              Sign Up
+              {t("auth.signUp")}
             </Typo>
           </Pressable>
         </View>

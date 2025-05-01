@@ -7,7 +7,9 @@ import { verticalScale } from "@/utils/styling";
 import Button from "@/components/Button";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 const Welcome = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   return (
     <ScreenWrapper>
@@ -18,7 +20,7 @@ const Welcome = () => {
             onPress={() => router.push("/(auth)/login")}
             style={styles.loginButton}
           >
-            <Typo fontWeight="500">Sign in</Typo>
+            <Typo fontWeight="500">{t("auth.signIn")}</Typo>
           </TouchableOpacity>
         </View>
 
@@ -35,13 +37,13 @@ const Welcome = () => {
             entering={FadeInDown.duration(1000).springify().damping(12)}
             style={{ alignItems: "center" }}
           >
-            <Typo size={30} fontWeight={"800"}>
-              Always take control
+            <Typo size={32} fontWeight={"800"}>
+              {t("auth.welcomeMessage")}
             </Typo>
           </Animated.View>
           <View style={{ alignItems: "center" }}>
-            <Typo size={30} fontWeight={"800"}>
-              of your finances
+            <Typo size={32} fontWeight={"800"}>
+              {t("auth.welcomeMessage2")}
             </Typo>
           </View>
 
@@ -53,10 +55,10 @@ const Welcome = () => {
             style={{ alignItems: "center", gap: 2 }}
           >
             <Typo size={15} color={colors.textLight}>
-              Finances must be arranges to set a better
+              {t("auth.welcomeMessage3")}
             </Typo>
             <Typo size={15} color={colors.textLight}>
-              lifestyle in the future
+              {t("auth.welcomeMessage4")}
             </Typo>
           </Animated.View>
 
@@ -70,7 +72,7 @@ const Welcome = () => {
             {/* button  */}
             <Button onPress={() => router.push("/(auth)/register")}>
               <Typo size={22} color={colors.neutral900} fontWeight={"600"}>
-                Get started
+                {t("auth.getStarted")}
               </Typo>
             </Button>
           </Animated.View>
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: verticalScale(30),
     paddingBottom: verticalScale(45),
-    gap: spacingY._20,
+    gap: spacingY._15,
     shadowColor: "white",
     shadowOffset: { width: 0, height: -10 },
     elevation: 10,

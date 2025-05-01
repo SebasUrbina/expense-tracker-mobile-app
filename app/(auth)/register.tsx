@@ -10,6 +10,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/authContext";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const emailRef = useRef("");
@@ -18,9 +19,10 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { register: registerUser } = useAuth();
+  const { t } = useTranslation();
   const handleSubmit = async () => {
     if (!emailRef.current || !passwordRef.current || !nameRef.current) {
-      Alert.alert("Sign Up", "Please fill all the fields");
+      Alert.alert(t("auth.signUp"), t("alerts.fillFields"));
       return;
     }
 
@@ -33,7 +35,7 @@ const Register = () => {
     setIsLoading(false);
     console.log("register result: ", res);
     if (!res.success) {
-      Alert.alert("Sign Up", res.msg);
+      Alert.alert(t("auth.signUp"), res.msg);
     }
   };
 
@@ -45,21 +47,21 @@ const Register = () => {
 
         <View style={{ gap: 5, marginTop: spacingY._20 }}>
           <Typo size={30} fontWeight={"800"}>
-            Let's,
+            {t("auth.letsGetStarted") + ","}
           </Typo>
           <Typo size={30} fontWeight={"800"}>
-            Get Started
+            {t("auth.letsGetStarted2")}
           </Typo>
 
           {/* form */}
           <View style={styles.form}>
             <Typo size={16} color={colors.textLighter}>
-              Create an account to track all your expenses
+              {t("auth.createAccount")}
             </Typo>
 
             {/* input */}
             <Input
-              placeholder="Enter your name"
+              placeholder={t("auth.namePlaceholder")}
               onChangeText={(value) => (nameRef.current = value)}
               icon={
                 <Icons.User
@@ -70,7 +72,7 @@ const Register = () => {
               }
             />
             <Input
-              placeholder="Enter your email"
+              placeholder={t("auth.emailPlaceholder")}
               onChangeText={(value) => (emailRef.current = value)}
               icon={
                 <Icons.At
@@ -81,7 +83,7 @@ const Register = () => {
               }
             />
             <Input
-              placeholder="Enter your password"
+              placeholder={t("auth.passwordPlaceholder")}
               secureTextEntry
               onChangeText={(value) => (passwordRef.current = value)}
               icon={
@@ -97,16 +99,16 @@ const Register = () => {
 
         <Button onPress={handleSubmit} loading={isLoading}>
           <Typo fontWeight={"700"} color={colors.black} size={21}>
-            Sign Up
+            {t("auth.signUp")}
           </Typo>
         </Button>
 
         {/* footer */}
         <View style={styles.footer}>
-          <Typo size={15}>Already have an account?</Typo>
+          <Typo size={15}>{t("auth.haveAccount")}</Typo>
           <Pressable onPress={() => router.navigate("/(auth)/login")}>
             <Typo size={15} fontWeight={"700"} color={colors.primary}>
-              Login
+              {t("auth.login")}
             </Typo>
           </Pressable>
         </View>
