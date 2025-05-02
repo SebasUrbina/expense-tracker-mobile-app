@@ -513,19 +513,19 @@ export default TransactionModal;
 
 const menuOptionsStyles = {
   optionsContainer: {
-    backgroundColor: colors.neutral800,
+    backgroundColor: colors.neutral700,
     borderRadius: radius._10,
-    padding: spacingY._3,
-    borderWidth: 1,
-    borderColor: colors.neutral700,
+    // padding: spacingY._3,
+    // borderWidth: 1,
+    // borderColor: colors.neutral500,
   },
   optionText: {
     color: colors.white,
-    borderBottomColor: colors.neutral700,
-    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral400,
+    borderBottomWidth: 0.5,
     fontSize: verticalScale(14),
-    paddingVertical: spacingY._7,
-    paddingHorizontal: spacingX._10,
+    paddingVertical: spacingY._5,
+    paddingHorizontal: spacingX._5,
   },
   optionWrapper: {
     paddingVertical: spacingY._3,
@@ -646,6 +646,7 @@ const styles = StyleSheet.create({
   topMenu: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    marginTop: spacingY._5,
     marginBottom: spacingY._15,
     gap: spacingX._5,
   },
@@ -653,9 +654,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral800,
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: spacingY._7,
+    paddingVertical: spacingY._5,
     paddingHorizontal: spacingX._10,
-    borderRadius: radius._15,
+    borderRadius: radius._10,
     borderWidth: 1,
     borderColor: colors.neutral700,
     gap: spacingX._5,
@@ -683,7 +684,6 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     backgroundColor: colors.neutral800,
-    borderRadius: radius._20,
     width: "90%",
     padding: spacingY._15,
     shadowColor: colors.black,

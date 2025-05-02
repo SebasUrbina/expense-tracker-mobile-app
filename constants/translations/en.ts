@@ -9,7 +9,7 @@ export const en = {
     confirm: "Confirm",
     search: "Search",
     today: "Today",
-    selectWallet: "Select Wallet",
+    selectWallet: "Wallet",
     description: "Description (optional)",
     amount: "Amount",
     walletName: "Wallet name",
