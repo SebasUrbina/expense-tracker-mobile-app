@@ -230,7 +230,9 @@ const TransactionModal = () => {
                       {(transaction.date as Date).toLocaleDateString() ===
                       new Date().toLocaleDateString()
                         ? t("common.today")
-                        : (transaction.date as Date).toLocaleDateString()}
+                        : (transaction.date as Date).toLocaleDateString(
+                            "es-CL"
+                          )}
                     </Typo>
                     <Icons.CaretDown
                       size={verticalScale(16)}
