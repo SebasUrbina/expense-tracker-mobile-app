@@ -1,6 +1,5 @@
 import { CategoryType, ExpenseCategoriesType } from "@/types";
 import { colors } from "./theme";
-
 import * as Icons from "phosphor-react-native"; // Import all icons dynamically
 
 export const expenseCategories: ExpenseCategoriesType = {
@@ -22,11 +21,17 @@ export const expenseCategories: ExpenseCategoriesType = {
     icon: Icons.Car,
     bgColor: "#0f766e", // Darker Red-Brown
   },
-  subway: {
-    label: "Subway",
-    value: "subway",
-    icon: Icons.Train,
-    bgColor: "#0369a1", // Dark Blue
+  travel: {
+    label: "Travel",
+    value: "travel",
+    icon: Icons.MapTrifold,
+    bgColor: "#3b82f6", // Darker Blue
+  },
+  uber: {
+    label: "Uber",
+    value: "uber",
+    icon: Icons.CarSimple,
+    bgColor: "#18181b", // Dark Gray
   },
   entertainment: {
     label: "Entertainment",
@@ -106,17 +111,29 @@ export const expenseCategories: ExpenseCategoriesType = {
     icon: Icons.WifiHigh,
     bgColor: "#2563eb", // Dark Indigo
   },
-  uber: {
-    label: "Uber",
-    value: "uber",
-    icon: Icons.CarSimple,
-    bgColor: "#18181b", // Dark Gray
+  phone: {
+    label: "Phone",
+    value: "phone",
+    icon: Icons.Phone,
+    bgColor: "#2563eb", // Dark Indigo
   },
-  trips: {
-    label: "Trips",
-    value: "trips",
-    icon: Icons.MapTrifold,
+  insurrance: {
+    label: "Insurance",
+    value: "insurance",
+    icon: Icons.ShieldPlus,
     bgColor: "#15803d", // Dark Green
+  },
+  car: {
+    label: "Car",
+    value: "car",
+    icon: Icons.Car,
+    bgColor: "#f97316", // Dark Orange
+  },
+  events: {
+    label: "Events",
+    value: "events",
+    icon: Icons.Calendar,
+    bgColor: "#a21caf", // Deep Pink
   },
   personal: {
     label: "Personal",

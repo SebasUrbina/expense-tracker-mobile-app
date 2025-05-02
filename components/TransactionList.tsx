@@ -88,12 +88,13 @@ const TransactionItem = ({
   index,
   handleClick,
 }: TransactionItemProps) => {
-  console.log("item.description: ", item);
+  const { t } = useTranslation();
+  // console.log("item.description: ", item);
   //   let category = incomeCategory;
   let category =
     item?.type == "income" ? incomeCategory : expenseCategories[item.category!];
   //   let category = expenseCategories["transportation"];
-  console.log("category: ", category);
+  // console.log("category: ", category);
   const IconComponent = category.icon;
 
   const date = (item?.date as Timestamp)
@@ -117,7 +118,7 @@ const TransactionItem = ({
         </View>
 
         <View style={styles.categoryDes}>
-          <Typo size={17}>{category.label}</Typo>
+          <Typo size={17}>{t(`transactionType.${category.value}`)}</Typo>
           <Typo
             size={12}
             color={colors.neutral400}

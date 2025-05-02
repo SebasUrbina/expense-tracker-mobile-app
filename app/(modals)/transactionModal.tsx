@@ -270,7 +270,7 @@ const TransactionModal = () => {
                 ref={descriptionInputRef}
                 style={styles.descriptionInput}
                 placeholder={t("common.description")}
-                placeholderTextColor={colors.neutral500}
+                placeholderTextColor={colors.neutral600}
                 value={transaction.description}
                 onChangeText={(value) =>
                   setTransaction({
@@ -307,7 +307,7 @@ const TransactionModal = () => {
                   ]}
                   keyboardType="numeric"
                   placeholder="0"
-                  placeholderTextColor={colors.neutral500}
+                  placeholderTextColor={colors.neutral600}
                   value={
                     transaction.amount
                       ? "$" + parseAmount(transaction.amount)
@@ -458,7 +458,7 @@ const TransactionModal = () => {
                           color={isSelected ? colors.white : colors.neutral300}
                           fontWeight={isSelected ? "600" : "400"}
                         >
-                          {category.label}
+                          {t(`transactionType.${category.value}`)}
                         </Typo>
                       </TouchableOpacity>
                     );
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
     fontSize: verticalScale(20),
     color: colors.white,
     fontWeight: "bold",
-    borderBottomColor: colors.neutral700,
+    borderBottomColor: colors.neutral500,
     borderBottomWidth: 1,
     paddingTop: spacingY._10,
     paddingBottom: spacingY._10,
