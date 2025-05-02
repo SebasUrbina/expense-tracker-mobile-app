@@ -87,6 +87,7 @@ export const en = {
     currency: "Currency",
     theme: "Theme",
     language: "Language",
+    selectLanguage: "Select the language",
   },
   wallet: {
     title: "My Wallets",
